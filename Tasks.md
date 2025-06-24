@@ -1,116 +1,96 @@
-# PractiPal - Admin Flow Tasks
+# PractiPal - Admin Flow Task Breakdown
 
-This document outlines development tasks based on the planning for the PractiPal Admin module. Each task should be completed with test coverage, security checks, OpenAPI documentation, and frontend integration using the `practipal-frontend` structure.
+> 🔗 Refer to [Planning1.md](./Planning1.md) for full architecture, scope, and enforcement rules.
 
----
+## 🛠️ Phase 1: Project Setup & Auth
 
-## ✅ General Guidelines for All Tasks
-
-- Read the corresponding frontend structure and API usage before implementing
-- Write secure, optimized, production-grade Django code
-- Use JWT authentication with role-based permissions
-- Follow drf-spectacular (OpenAPI 3.0) for documentation
-- Enforce subscription-based access control
-- Cache-read-heavy endpoints with `django-redis` and `cacheops`
-- Test every API independently and after frontend integration
-- After completing each task:
-  - ✅ Mark it completed in this file
-  - 🔁 Move to the next task
+- [ ] Initialize Django project with PostgreSQL
+- [ ] Create custom User model with roles: `Admin`, `Therapist`, `Client`
+- [ ] Implement JWT authentication (djangorestframework-simplejwt)
+- [ ] Add email verification and password reset flow
+- [ ] Role-based permission classes (`IsAdmin`, `IsTherapist`, `IsClient`)
 
 ---
 
-## 📌 Phase 1: Authentication & Role Access
+## 🔐 Phase 2: Admin Login Flow
 
-- [ ] Implement Admin login using JWT
-- [ ] Add role field (`Admin`, `Therapist`, `Client`) and enforce access
-- [ ] Add password reset, email verification flows
-- [ ] Create Super Admin and Subscription Manager roles
-- [ ] Add middleware for enforcing authenticated access
-
----
-
-## 📌 Phase 2: Therapist Management
-
-- [ ] Create Therapist model (extend User)
-- [ ] Admin: CRUD operations for therapists
-- [ ] Assign subscription to therapist during onboarding
-- [ ] Restrict therapist login unless they are subscribed
-- [ ] Support shared subscriptions (team therapists)
-- [ ] View usage metrics (sessions, clients) per therapist
+- [ ] Create login API (Admin JWT + role check)
+- [ ] Implement logout & token blacklist
+- [ ] Admin dashboard basic structure (stats + endpoints)
+- [ ] **Restrict Therapist login until a valid subscription is assigned**
+- [ ] **Validate therapist subscription status during login**
+- [ ] **Return subscription features in login response for frontend enforcement**
 
 ---
 
-## 📌 Phase 3: Subscription Plans
+## 👥 Phase 3: Therapist Management
 
-- [ ] Create SubscriptionPlan model
-- [ ] Add fields: name, price, client/session limits, team member count
-- [ ] Support premium flags: API Access, Branding, Support, Popular
-- [ ] Allow custom features (free text)
-- [ ] Assign plans to therapists during onboarding
-- [ ] View therapists under each plan
-
----
-
-## 📌 Phase 4: Promo Code Management
-
-- [ ] Model: PromoCode (type, value, usage limit, status, expiry)
-- [ ] Admin: Create/update/delete promo codes
-- [ ] Validate promo codes during therapist subscription
+- [ ] Admin - Add Therapist API
+- [ ] Admin - View/Edit/Delete Therapist
+- [ ] Admin - Assign subscription to therapist
+- [ ] **Therapist login blocked until subscription is assigned and active**
+- [ ] Email notification on account creation
 
 ---
 
-## 📌 Phase 5: Analytics Dashboard
+## 📦 Phase 4: Subscription Plans
 
-- [ ] KPIs: New signups, active therapists, plan usage
-- [ ] Time series graphs: weekly/monthly metrics
-- [ ] Expose analytics APIs with role-based access
-
----
-
-## 📌 Phase 6: Audit Logs
-
-- [ ] Model: AuditLog (user, action, timestamp, details)
-- [ ] Log critical actions: login, plan change, promo use, settings update
-- [ ] Admin view for audit trail
-
----
-
-## 📌 Phase 7: Notification Templates
-
-- [ ] Model: NotificationTemplate (type, name, subject, body)
-- [ ] Allow placeholders like `{user_name}`, `{reset_link}`
-- [ ] CRUD operations via admin panel
+- [x] Create `SubscriptionPlan` model with:
+  - [x] Name, Description
+  - [x] Monthly & Yearly Pricing
+  - [x] Trial Days
+  - [x] Usage Limits: Clients, Sessions, Storage, Team Members
+  - [x] Premium Options: API Access, Branding, Support, Popular tag
+  - [x] Extra feature list (JSON)
+- [ ] API to create, list, update plans
+- [ ] Enforce usage limits at runtime for therapists
+- [ ] **Validate therapist feature access based on their subscription plan**
+- [ ] **Prevent login or dashboard access if subscription is expired/deactivated**
 
 ---
 
-## 📌 Phase 8: System Settings
+## 🏷️ Phase 5: Promo Code System
 
-- [ ] General settings: Site name, maintenance mode
-- [ ] Session config: max duration, buffer time
-- [ ] Notification toggles: Enable/disable email/SMS
-- [ ] Create a key-value pair model for dynamic settings
-- [ ] APIs to update/fetch settings
+- [ ] Create Promo Code Model (type, value, limit, expiry, status)
+- [ ] CRUD APIs for promo code
+- [ ] Validation logic in subscription API
 
 ---
 
-## 🔒 Phase 9: Security & Rate Limiting
+## 📊 Phase 6: Analytics & Audit Logs
 
-- [ ] Protect all endpoints with permissions and throttling
-- [ ] Use `django-ratelimit` with Redis backend
-- [ ] Block brute-force login attempts
-- [ ] Restrict access to subscription-only features
-
----
-
-## 🧪 Final Checklist
-
-- [ ] All APIs are documented using drf-spectacular
-- [ ] Postman collection exported and tested
-- [ ] All tasks marked completed in this file
-- [ ] Frontend tested against each API
-- [ ] Admin dashboard is functional and secure
+- [ ] Track logins, subscription actions
+- [ ] Daily therapist sign-up count
+- [ ] Store audit logs in separate model
+- [ ] Admin API to view logs (with filters)
 
 ---
 
-**Note:** This `Tasks.md` should be updated progressively. Task completion should be validated with real frontend integration and sample data.
+## 📨 Phase 7: Notifications
 
+- [ ] NotificationTemplate Model
+- [ ] API to manage email/SMS templates
+- [ ] Use templates in therapist welcome mail, etc.
+
+---
+
+## ⚙️ Phase 8: Settings Panel
+
+- [ ] General Settings:
+  - [ ] Site Name
+  - [ ] Maintenance Mode
+  - [ ] Allow new registrations
+- [ ] Notification Settings:
+  - [ ] Enable Email / SMS toggles
+- [ ] Session Settings:
+  - [ ] Max session duration
+  - [ ] Session buffer time
+
+---
+
+## 🧪 Final Phase: Testing & Integration
+
+- [ ] Write unit & integration tests for all admin APIs
+- [ ] Document API endpoints (Swagger / ReDoc)
+- [ ] Connect with frontend (Admin panel)
+- [ ] Review and QA
