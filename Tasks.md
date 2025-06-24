@@ -4,11 +4,11 @@
 
 ## 🛠️ Phase 1: Project Setup & Auth
 
-- [ ] Initialize Django project with PostgreSQL
-- [ ] Create custom User model with roles: `Admin`, `Therapist`, `Client`
-- [ ] Implement JWT authentication (djangorestframework-simplejwt)
+- [x] Initialize Django project with PostgreSQL
+- [x] Create custom User model with roles: `Admin`, `Therapist`, `Client`
+- [x] Implement JWT authentication (djangorestframework-simplejwt)
 - [ ] Add email verification and password reset flow
-- [ ] Role-based permission classes (`IsAdmin`, `IsTherapist`, `IsClient`)
+- [x] Role-based permission classes (`IsAdmin`, `IsTherapist`, `IsClient`)
 
 ---
 
@@ -42,7 +42,7 @@
   - [x] Usage Limits: Clients, Sessions, Storage, Team Members
   - [x] Premium Options: API Access, Branding, Support, Popular tag
   - [x] Extra feature list (JSON)
-- [ ] API to create, list, update plans
+- [x] API to create, list, update plans
 - [ ] Enforce usage limits at runtime for therapists
 - [ ] **Validate therapist feature access based on their subscription plan**
 - [ ] **Prevent login or dashboard access if subscription is expired/deactivated**
